@@ -1,0 +1,5 @@
+package autorestapi
+
+func init() {
+
+}
