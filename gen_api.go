@@ -101,7 +101,7 @@ func GenApi(method int, model Model) (api func(*gin.Context), err error) {
 				RespErr(c, errMsg)
 				return
 			}
-			result, err := model.Find(query, iPageSize, iPageIndex, sorted)
+			result, err := FindPage(model, query, iPageSize, iPageIndex, sorted)
 			if err != nil {
 				errMsg := fmt.Sprintf("%v", err)
 				RespErr(c, errMsg)
@@ -124,7 +124,7 @@ func GenApi(method int, model Model) (api func(*gin.Context), err error) {
 				RespErr(c, errMsg)
 				return
 			}
-			err = m.Save()
+			err = Save(m)
 			if err != nil {
 				errMsg := fmt.Sprintf("%v", err)
 				RespErr(c, errMsg)
@@ -150,7 +150,7 @@ func GenApi(method int, model Model) (api func(*gin.Context), err error) {
 			_id := c.PostForm("_id")
 			id := bson.ObjectId(_id)
 			query := bson.M{"_id": id}
-			om, err := model.FindOne(query)
+			om, err := FindOne(model, query)
 			if err != nil {
 				errMsg := fmt.Sprintf("%v", err)
 				RespErr(c, errMsg)
@@ -158,7 +158,7 @@ func GenApi(method int, model Model) (api func(*gin.Context), err error) {
 			}
 			update := bson.M{"$set": om}
 			if om != nil {
-				err = model.UpdateOne(query, update)
+				err = UpdateOne(model, query, update)
 			}
 			if err != nil {
 				errMsg := fmt.Sprintf("%v", err)
@@ -177,7 +177,7 @@ func GenApi(method int, model Model) (api func(*gin.Context), err error) {
 				RespErr(c, errMsg)
 				return
 			}
-			count, err := model.Count(data["query"])
+			count, err := Count(model, data["query"])
 			if err != nil {
 				errMsg := fmt.Sprintf("%v", err)
 				RespErr(c, errMsg)
@@ -190,7 +190,7 @@ func GenApi(method int, model Model) (api func(*gin.Context), err error) {
 			update := map[string]interface{}{
 				"$set": data["update"],
 			}
-			err = model.UpdateOne(data["query"], update)
+			err = UpdateOne(model, data["query"], update)
 			if err != nil {
 				errMsg := fmt.Sprintf("%v", err)
 				RespErr(c, errMsg)
@@ -203,7 +203,7 @@ func GenApi(method int, model Model) (api func(*gin.Context), err error) {
 		api = func(c *gin.Context) {
 			query := bson.M{}
 			c.BindJSON(query)
-			err := model.DeleteAll(query)
+			err := DeleteAll(model, query)
 			if err != nil {
 				errMsg := fmt.Sprintf("%v", err)
 				RespErr(c, errMsg)
