@@ -7,7 +7,7 @@ import (
 )
 
 type Model interface {
-	ID() bson.ObjectId
+	GetID() bson.ObjectId
 	New() (Model, error)
 	Check() error
 	Query() interface{}
@@ -20,7 +20,7 @@ func Save(model Model) (err error) {
 	if err != nil {
 		return
 	}
-	err = mgorm.Save(collection, model, model.ID())
+	err = mgorm.Save(collection, model, model.GetID())
 	return
 }
 
