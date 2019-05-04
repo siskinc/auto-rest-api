@@ -101,13 +101,13 @@ func GenApi(method int, model Model) (api func(*gin.Context), err error) {
 				RespErr(c, errMsg)
 				return
 			}
-			result, err := FindPage(model, query, iPageSize, iPageIndex, sorted)
+			result, count, err := FindPage(model, query, iPageSize, iPageIndex, sorted)
 			if err != nil {
 				errMsg := fmt.Sprintf("%v", err)
 				RespErr(c, errMsg)
 				return
 			}
-			RespData(c, result)
+			RespListData(c, result, count)
 		}
 	case POST:
 		api = func(c *gin.Context) {
