@@ -13,10 +13,10 @@ type Response struct {
 }
 
 type ResponseList struct {
-	Data    interface{} `json:"data,omitempty" bson:"data"`
-	Count   int         `json:"count,omitempty" bson:"count"`
-	ErrMsg  string      `json:"err_msg,omitempty" bson:"err_msg"`
-	Success int         `json:"success,omitempty" bson:"success"`
+	Data    interface{} `json:"data"`
+	Count   int         `json:"count"`
+	ErrMsg  string      `json:"err_msg"`
+	Success int         `json:"success"`
 }
 
 func RespErr(c *gin.Context, errMsg string) {

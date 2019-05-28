@@ -45,7 +45,7 @@ func FindOne(model Model, query interface{}) (result Model, err error) {
 	return
 }
 
-func FindPage(model Model, query interface{}, pageSize, pageIndex int, sorted string) (result []Model, count int, err error) {
+func FindPage(model Model, query interface{}, pageSize, pageIndex int, sorted string) (result []interface{}, count int, err error) {
 	var collection *mgo.Collection
 	collection, err = model.Collection()
 	if err != nil {
@@ -55,7 +55,12 @@ func FindPage(model Model, query interface{}, pageSize, pageIndex int, sorted st
 	if err != nil {
 		return
 	}
-	err = collection.Find(query).Skip((pageIndex - 1) * pageSize).Limit(pageSize).Sort(sorted).All(&result)
+	err = collection.Find(query).Skip((pageIndex - 1) * pageSize).Limit(pageSize).All(&result)
+	if sorted == "" {
+		err = collection.Find(query).Skip((pageIndex - 1) * pageSize).Limit(pageSize).All(&result)
+	} else {
+		err = collection.Find(query).Skip((pageIndex - 1) * pageSize).Limit(pageSize).Sort(sorted).All(&result)
+	}
 	return
 }
 
